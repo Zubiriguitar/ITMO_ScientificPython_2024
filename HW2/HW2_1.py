@@ -65,5 +65,4 @@ def db_id(ids:list):
         return ensembl_parse_response(resp)
     else:
         return 'Error. Input data is not matching any accesible database input formats'
-    return
 
