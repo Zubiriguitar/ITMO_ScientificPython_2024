@@ -12,6 +12,10 @@ import condacolab
 # ! conda install -c bioconda seqkit
 # ! conda update -n base -c conda-forge conda
 
+from Bio.PDB import *
+from Bio import SeqIO
+
+
 def get_uniprot(ids: list):
     accessions = ','.join(ids)
     endpoint = "https://rest.uniprot.org/uniprotkb/accessions"
@@ -62,8 +66,6 @@ def extract_id(input_string): # Extracting seq id from sequence header
         return None
     
     
-from Bio.PDB import *
-from Bio import SeqIO
 
 def fasta_parser (path):
   stats = subprocess.run(("seqkit", "stats", path, "-a"), capture_output=True, text=True) #running seqkit
@@ -72,7 +74,7 @@ def fasta_parser (path):
   json_dict = {} 
 
   if stats.stdout != '' and stats.stderr == '': # no error result
-    seqkit_out = seqkit.stdout.strip().split('\n')
+    seqkit_out = stats.stdout.strip().split('\n')
     prop_names = seqkit_out[0].split()[1:]
     prop_vals = seqkit_out[1].split()[1:]
     seq_result = dict(zip(prop_names, prop_vals)) #extracting seqkit stats and dict formatting
