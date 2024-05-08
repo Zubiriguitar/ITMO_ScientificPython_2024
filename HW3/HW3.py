@@ -1,3 +1,6 @@
+import openmeteo_requests
+import datetime
+
 class IncreaseSpeed:
     def __init__(self, current_speed, max_speed):
         self.current_speed = current_speed
@@ -35,16 +38,17 @@ class DecreaseSpeed:
 
 class Car:
     cars = 0
-    on_road = True
+    
 
     def __init__(self, max_speed: int, current_speed=0):
         Car.cars += 1
+        self.on_road = True
         self.max_speed = max_speed
         self.current_speed = current_speed
 
     def accelerate(self, border=None):
         speed = self.current_speed
-        if not Car.on_road:
+        if not self.on_road:
             print("Car is currently parked. Cannot accelerate.")
             return
 
@@ -63,7 +67,7 @@ class Car:
 
     def brake(self, border=None):
         speed = self.current_speed
-        if not Car.on_road:
+        if not self.on_road:
             print("Car is currently parked. Cannot brake.")
             return
 
@@ -79,22 +83,23 @@ class Car:
             speed = next(tormoz)
             print("Current speed:", speed)
             self.current_speed = speed
-    @classmethod
-    def parking(cls, car):
-        if  car.on_road:
-            car.on_road = False
-            cls.cars -= 1
+    
+    
+    def parking(self):
+        if  self.on_road:
+            self.on_road = False
+            Car.cars -= 1
             print("Car is now off the road.")
         else:
             print("Car is already off the road or not found.")
 
+    @classmethod
+    def total_cars(cls):
+        print("Total number of cars on the road:", cls.cars)
+
+
     @staticmethod
-    def total_cars():
-        print("Total number of cars on the road:", Car.cars)
-
-
-
-    def show_weather():
+    def show_weather(self):
         import openmeteo_requests
         import datetime
         openmeteo = openmeteo_requests.Client()
@@ -121,7 +126,7 @@ class Car:
                       f"Current wind_speed: {round(current_wind_speed_10m, 1)} m/s")
 
 
-
+# Car.show_weather()
 # oka = Car(max_speed=120, current_speed=50)
 # oka.accelerate(100)
 # oka.brake(30)
@@ -141,10 +146,11 @@ class Car:
 # Car.total_cars()
 
 
-# Car.parking(oka)
-# Car.parking(uaz)
-
+# oka.parking()
+# uaz.parking()
 
 # Car.total_cars()
 
-
+# oka.accelerate(100)
+# oka.brake(30)
+# oka.parking()
